@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <!-- data의 값에 따라 태그의 class를 동적으로 지정할 수 있음 -->
+    <div id="app1" v-bind:class="{ active: isActive, 'text-danger': hasError }">
+        Class Binding
+    </div>
+    <script>
+        var app1 = new Vue({
+            el: "#app1",
+            data: {
+                isActive: true,
+                hasError: true
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- classObject 를 통한 class 동적 바인딩 -->
+    <div id="app2" v-bind:class="classObject">
+        Class Binding : classObject
+    </div>
+    <script>
+        var app2 = new Vue({
+            el: "#app2",
+            data: {
+                classObject: {
+                    active: true,
+                    'text-danger': true
+                }
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- computed를 결합해 class 동적 바인딩 -->
+    <div id="app3" v-bind:class="classObject">
+        Class Binding : computed classObject
+    </div>
+    <script>
+        var app3 = new Vue({
+            el: "#app3",
+            data: {
+                isActive: true,
+                error: null
+            },
+            computed: {
+                classObject: function () {
+                    return {
+                        active: this.isActive && !this.error,
+                        'text-danger': this.error && this.error.type === 'fatal'
+                    }
+                }
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- array를 이용한 class 동적 바인딩 -->
+    <div id="app4" v-bind:class="[{ active: isActive }, errorClass]">
+        Class Binding : Using Array
+    </div>
+    <script>
+        var app4 = new Vue({
+            el: "#app4",
+            data: {
+                isActive: true,
+                errorClass: 'text-danger'
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- style 바인딩 -->
+    <div id="app5" :style="{ color: activeColor, fontSize: fontSize + 'px' }">
+        <div>Style Binding</div>
+        <button v-on:click="fontSize++">size up</button>
+        <button v-on:click="fontSize--">size down</button>
+    </div>
+    <script>
+        var app5 = new Vue({
+            el: "#app5",
+            data: {
+                activeColor: 'red',
+                fontSize: 30
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- styleObject 를 통한 sytle 동적 바인딩 -->
+    <!-- computed 속성과 결합하여 사용하기도 함 -->
+    <div id="app6" :style="styleObject">
+        Style Binding : styleObject
+    </div>
+    <script>
+        var app6 = new Vue({
+            el: "#app6",
+            data: {
+                styleObject: {
+                    color: 'red',
+                    fontSize: '13px'
+                }
+            }
+        })
+    </script>
+    <hr/>
+
+    <!-- array 를 이용한 style 바인딩 -->
+    <div id="app7">
+        <div :style="[baseStyles, overridingStyles1]">
+            Style Binding : array1
+        </div>
+        <div :style="[baseStyles, overridingStyles2]">
+            Style Binding : array2
+        </div>
+    </div>
+    <script>
+    var app7 = new Vue({
+        el:"#app7",
+        data:{
+            baseStyles : {
+                fontSize: '20px'
+            },
+            overridingStyles1 : {
+                color : 'red'
+            },
+            overridingStyles2 : {
+                color : 'blue'
+            }
+        }
+    })
+    console.log(String(app7.baseStyles.fontSize))
+    </script>
+</body>
+
+</html>

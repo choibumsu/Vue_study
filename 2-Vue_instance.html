@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app1">
+        {{ a }}
+    </div>
+
+    <div id="app2">
+        {{ a }}
+    </div>
+    <script>
+        // 데이터 객체
+        var data1 = { a: 1 }
+        /* data에 a 이외의 다른 속성을 추가해도 vm 인스턴스에는 반영 안 됨 */
+
+        // Vue인스턴스에 데이터 객체를 추가합니다.
+        var vm1 = new Vue({
+            el: "#app1",
+            data: data1,
+            created: function () {
+                // `this` 는 vm1 인스턴스를 가리킵니다.
+                console.log('a is: ' + this.a)
+            }
+        })
+
+        // 같은 객체를 참조합니다!
+        vm1.a === data1.a // => true
+
+        // 속성 설정은 원본 데이터에도 영향을 미칩니다.
+        vm1.a = 2
+        data1.a // => 2
+
+        // ... 당연하게도
+        data1.a = 3
+        vm1.a // => 3
+
+        /* ----------------------------------------- */
+        var data2 = { a: 1 }
+
+        //더 이상 data2 값이 변하지 않음
+        Object.freeze(data2)
+        var vm2 = new Vue({
+            el: "#app2",
+            data: data2
+        })
+        data2.a = 2
+        vm2.a // => 1
+
+    </script>
+</body>
+
+</html>

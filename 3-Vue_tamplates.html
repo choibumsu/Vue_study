@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <!-- 문자열 바인딩 -->
+    <div id="app">메시지: {{ msg }}</div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                msg: '안녕하세요 Vue!'
+            }
+        })
+        app.msg = "변경"
+    </script>
+
+    <!-- v-once 데이터를 변경해도 업데이트 되지 않음 -->
+    <div v-once id="app2">메시지: {{ msg }}</div>
+    <script>
+        var app2 = new Vue({
+            el: '#app2',
+            data: {
+                msg: '안녕하세요 Vue!'
+            }
+        })
+        app2.msg = "변경" //v-once로 인해 변경되지 않음
+    </script>
+
+    <!-- {{}} 안의 내용은 문자열로 인식함. html 태그를 사용하려면 v-html -->
+    <!-- XSS 위험이 있으므로 사용자가 입력한 정보에 대해서는 사용하지 않음 -->
+    <div id="app3">
+        <p>Using mustaches: {{ rawHtml }}</p>
+        <p>Using v-html directive: <span v-html="rawHtml"></span></p>
+    </div>
+    <script>
+        var app3 = new Vue({
+            el: "#app3",
+            data: {
+                rawHtml: "<span style='color:red'>This is RED</span>"
+            }
+        })
+    </script>
+
+    <!-- 변수값에 따라 속성을 동적으로 지정할 수 있음 v-bind -->
+    <div id="app4">
+        <div v-bind:id="dynamicId">id : {{ dynamicID }}</div>
+        <button v-bind:disabled="isButtonDisabled">Button</button>
+    </div>
+    <script>
+        var app4 = new Vue({
+            el: "#app4",
+            data: {
+                isButtonDisabled: false,
+                dynamicID: "user_id",
+            }
+        })
+    </script>
+
+    <!-- 바인딩 내에서 JavaScript 표현식을 모두 지원함 -->
+    <div id="app5">
+        <div>{{ number + 1 }}</div>
+        <div>{{ ok ? 'YES' : "NO" }}</div>
+        <div>{{ message.split('').reverse().join('') }}</div>
+        <div v-bind:id="'list-' + id">id : list-{{ id }}</div>
+    </div>
+    <script>
+        var app5 = new Vue({
+            el: "#app5",
+            data: {
+                number: 10000,
+                ok: true,
+                message: "message",
+                id: 1
+            }
+        })
+    </script>
+
+    <!-- 약어. v-bind -> : , v-on -> @ -->
+    <div id="app6">
+        <a v-bind:href="url">Link1</a><br/>
+        <a :href="url">Link2</a><br/>
+
+        <a v-on:click="doSomething">v-on</a><br/>
+        <a @click="doSomething">v-on</a><br/>
+    </div>
+    <script>
+        var app6 = new Vue({
+            el : "#app6",
+            data : {
+                url : "www.google.com",
+            },
+            methods : {
+                doSomething : function (e) {
+                    alert("v-on:click");
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
