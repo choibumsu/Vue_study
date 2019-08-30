@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app1">
+        <p>Vue if</p>
+        <h1 v-if="ok">Yes</h1>
+        <h1 v-else>No</h1>
+    </div>
+    <script>
+        var app1 = new Vue({
+            el: "#app1",
+            data: {
+                ok: false
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- v-if문으로 묶은 그룹 -->
+    <div id="app2">
+        <p>Vue if group</p>
+        <template v-if="ok">
+            <h1>Yes</h1>
+            <p>Yes : description</p>
+        </template>
+        <template v-else>
+            <h1>No</h1>
+            <p>No : description</p>
+        </template>
+    </div>
+    <script>
+        var app2 = new Vue({
+            el: "#app2",
+            data: {
+                ok: true
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- v-else-if -->
+    <div id="app3">
+        <template v-if="type === 'A'">
+            <h1>A</h1>
+            <p>AAAAA</p>
+        </template>
+        <template v-else-if="type === 'B'">
+            <h1>B</h1>
+            <p>BBBBB</p>
+        </template>
+        <template v-else="type === 'C'">
+            <h1>C</h1>
+            <p>CCCCC</p>
+        </template>
+    </div>
+    <script>
+        var app3 = new Vue({
+            el: "#app3",
+            data: {
+                type: "B"
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- Vue.js 에서 트렌지션이 이루어져도 사용자가 입력한 것은 변하지 않음 -->
+    <div id="app4">
+        <template v-if="loginType === 'username'">
+            <div>
+                <label>사용자 이름</label>
+                <input type="text" placeholder="사용자 이름을 입력하세요">
+            </div>
+            <button @click="loginType = 'email'">로그인 유형 변경</button>
+        </template>
+        <tmplate v-else>
+            <div>
+                <label>이메일</label>
+                <input type="text" placeholder="이메일 주소를 입력하세요">
+            </div>
+            <button @click="loginType = 'username'">로그인 유형 변경</button>
+        </tmplate>
+    </div>
+    <script>
+        var app4 = new Vue({
+            el: "#app4",
+            data: {
+                loginType: 'username'
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- 사용자 입력을 초기화해야할 때 key를 사용 -->
+    <div id="app5">
+        <template v-if="loginType === 'username'">
+            <div>
+                <label>사용자 이름</label>
+                <input type="text" placeholder="사용자 이름을 입력하세요" key="username-input">
+            </div>
+            <button @click="loginType = 'email'">로그인 유형 변경</button>
+        </template>
+        <tmplate v-else>
+            <div>
+                <label>이메일</label>
+                <input type="text" placeholder="이메일 주소를 입력하세요" key="email-input">
+            </div>
+            <button @click="loginType = 'username'">로그인 유형 변경</button>
+        </tmplate>
+    </div>
+    <script>
+        var app5 = new Vue({
+            el: "#app5",
+            data: {
+                loginType: 'username'
+            }
+        })
+    </script>
+    <hr/>
+
+    <!-- v-show : css display 속성을 토글하여 엘리먼트를 보여주거나 숨김
+        조건에 관계 없이 엘리먼트를 항상 렌더링함. 초기 렌더링 비용이 높음 -->
+    <!-- v-if는 거짓인 경우 그냥 건너뜀(lazy), 토글 비용이 높음 -->
+    <!-- 자주 토글하는 경우 v-show, 런타임 시 조건이 바뀌지 않으면 v-if -->
+    <div id="app6">
+        <h1 v-show="ok">안녕하세요!</h1>
+    </div>
+    <script>
+        var app6 = new Vue({
+            el: "#app6",
+            data: {
+                ok: true
+            }
+        })
+    </script>
+</body>
+
+</html>
