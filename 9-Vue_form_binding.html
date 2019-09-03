@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <!-- v-model : 사용자 입력 이벤트에 대한 데이터 업데이트 -->
+    <div id="app1">
+        <h1>v-model form binding</h1>
+
+        <form>
+            <h5>input data</h5>
+            <input v-model="msg1" placeholder="여기를 수정해보세요">
+            <p>메세지 : {{ msg1 }}</p>
+        </form>
+
+        <form>
+            <h5>textarea data</h5>
+            <span>여러 줄을 가지는 메시지:</span>
+            <p style="white-space: pre-line">{{ msg2 }}</p>
+            <br>
+            <textarea v-model="msg2" placeholder="여러줄을 입력해보세요"></textarea>
+        </form>
+
+        <form>
+            <h5>checkbox data</h5>
+            <input type="checkbox" v-model="checked">
+            <label>{{ checked }}</label>
+        </form>
+    </div>
+    <script>
+        var app1 = new Vue({
+            el: "#app1",
+            data: {
+                msg1: "",
+                msg2: "",
+                checked: false
+            }
+        })
+    </script>
+</body>
+
+</html>

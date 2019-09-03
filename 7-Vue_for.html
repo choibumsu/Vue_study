@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <!-- v-for -->
+    <div id="app1">
+        <h1>v-for</h1>
+        <ul>
+            <li v-for="item in items">
+                {{ item.message }}
+            </li>
+        </ul>
+    </div>
+    <script>
+        var app1 = new Vue({
+            el: "#app1",
+            data: {
+                items: [
+                    { message: 'item1' },
+                    { message: 'item2' },
+                    { message: 'item3' }
+                ]
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- v-for 블록에는 부모 속성에 대한 권한이 있음, 인덱스 옵션도 제공 -->
+    <!-- in 대신에 of 를 사용할 수 있음 -->
+    <div id="app2">
+        <h1>v-for parent&index</h1>
+        <ul>
+            <li v-for="(item, index) of items">
+                {{ parentMsg }} - {{ index }} - {{ item.message }}
+            </li>
+        </ul>
+    </div>
+    <script>
+        var app2 = new Vue({
+            el: "#app2",
+            data: {
+                parentMsg: "Parent",
+                items: [
+                    { message: 'item1' },
+                    { message: 'item2' },
+                    { message: 'item3' }
+                ]
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- object의 속성 반복 가능 -->
+    <div id="app3">
+        <h1>v-for object attribute</h1>
+        <ul>
+            <li v-for="value in object">
+                {{ value }}
+            </li>
+        </ul>
+    </div>
+    <script>
+        var app3 = new Vue({
+            el: "#app3",
+            data: {
+                object: {
+                    firstName: 'first',
+                    lastName: 'last',
+                    age: 30
+                }
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- key, value 순회 가능 -->
+    <!-- 순회 순서가 일관적이지 않음-->
+    <!-- DOM 노드들을 추적하고 엘리먼트 재사용을 위해 key 속성을 제공해야 함 
+        가능하면 항상 v-for에는 key를 지정해주는 것이 좋음 -->
+    <div id="app4">
+        <h1>v-for key&value</h1>
+        <div v-for="(value, key, index) in object" :key="index">
+            {{ index }}. {{ key }} : {{ value }}
+        </div>
+    </div>
+    <script>
+        var app4 = new Vue({
+            el: "#app4",
+            data: {
+                object: {
+                    firstName: 'first',
+                    lastName: 'last',
+                    age: 30
+                }
+            }
+        })
+    </script>
+    <hr />
+
+    <!--
+    다음 메소드들이 사용될때 array 변경을 감지함
+    array 변이 메소드
+    push()
+    pop()
+    shift()
+    unshift()
+    splice()
+    sort()
+    reverse()
+
+    array 대체 메소드
+    filter()
+    concat()
+    slice()
+    -->
+
+    <!-- Vue 객체에 속성 추가
+    이미 정의된 data(루트레벨)의 속성을 추가해도 감지하지 못함
+    set 메소드를 통해 중첩된 딕셔너리에 속성을 추가할 수 있음 -->
+    <div id="app5">
+        <h1>Vue attribute add</h1>
+        <div v-if="alpabet.A">
+            <p>A is be added : {{ alpabet.A }}</p>
+        </div>
+        <div v-else>
+            <p>A isn't here</p>
+        </div>
+        <div v-if="alpabet.B">
+            <p>B is be added : {{ alpabet.B }}</p>
+        </div>
+        <div v-else>
+            <p>B isn't here</p>
+        </div>
+    </div>
+    <script>
+        var app5 = new Vue({
+            el: "#app5",
+            data: {
+                alpabet: {
+                    C: 'default'
+                }
+            }
+        })
+        app5.alpabet.A = 1
+        app5.alpabet.A = 2 //왜 되지.....
+        Vue.set(app5.alpabet, 'B', 'B')
+        //app5.$set(this.alpabet, 'B', 'B') //위와 같은 의미
+    </script>
+    <hr />
+    <!-- Object.assign(), _.extend() -->
+    <div id="app6">
+        <h1>Vue attribute add : assign, extend</h1>
+        <div v-if="alpabet.A">
+            <p>A is be added : {{ alpabet.A }}</p>
+        </div>
+        <div v-else>
+            <p>A isn't here</p>
+        </div>
+        <div v-if="alpabet.B">
+            <p>B is be added : {{ alpabet.B }}</p>
+        </div>
+        <div v-else>
+            <p>B isn't here</p>
+        </div>
+    </div>
+    <script>
+        var app6 = new Vue({
+            el: "#app6",
+            data: {
+                alpabet: {
+                    C: "default"
+                }
+            }
+        })
+        app6.alpabet = Object.assign(app6.alpabet, {
+            A: 'A'
+        })
+        app6.alpabet = Object.assign({}, app6.alpabet, {
+            B: 'B'
+        })
+    </script>
+    <hr />
+
+    <!-- filtering, sorting -->
+    <div id="app7">
+        <h1>Filter&Sort</h1>
+        <h5>Even Number : {{ evenNumber }}</h5>
+        <p>loop</p>
+        <div v-for="(n, index) in evenNumber">{{ index + 1 }} - {{ n }}</div>
+        <h5>Odd Number : {{ odd(numbers) }}</h5>
+        <p>loop</p>
+        <div v-for="(n, index) in odd(numbers)">{{ index + 1 }} - {{ n }}</div>
+        <h5>Sorted Odd Number : {{ num_sort(odd(numbers)) }}</h5>
+    </div>
+    <script>
+        var app7 = new Vue({
+            el: "#app7",
+            data: {
+                numbers: [1, 2, 3, 4, 5]
+            },
+            computed: {
+                evenNumber: function () {
+                    return this.numbers.filter(function (number) {
+                        return number % 2 === 0
+                    })
+                }
+            },
+            methods: {
+                odd: function (numbers) {
+                    return numbers.filter(function (number) {
+                        return number % 2 === 1
+                    })
+                },
+                num_sort: function (numbers) {
+                    return numbers.sort(function (a, b) {
+                        return b - a;
+                    })
+                }
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- Range v-for -->
+    <div id="app8">
+        <h1>Range v-for</h1>
+        <span v-for="n in 10">{{ n }} </span>
+    </div>
+    <script>
+        var app8 = new Vue({
+            el: "#app8"
+        })
+    </script>
+    <hr />
+
+    <!-- v-for template -->
+    <div id="app9">
+        <h1>v-for template</h1>
+        <template v-for="item in items">
+            <div>{{ item.msg }}</div>
+            <div>----------------------</div>
+        </template>
+    </div>
+    <script>
+        var app9 = new Vue({
+            el: "#app9",
+            data: {
+                items: [
+                    { msg: "message_1" },
+                    { msg: "message_2" },
+                    { msg: "message_3" }
+                ]
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- v-for and v-if. v-for가 우선순위가 높아 루프를 돌 때마다 v-if 실행 -->
+    <div id="app10">
+        <h1>v-for and v-if</h1>
+        <ul v-if="todos.length">
+            <li v-for="todo in todos" v-if="!todo.isComplete">
+                {{ todo.title }}
+            </li>
+        </ul>
+        <p v-else>No todos left!</p>
+    </div>
+    <script>
+        var app10 = new Vue({
+            el: "#app10",
+            data: {
+                todos: [
+                    {
+                        title: "Todo 1",
+                        isComplete: true
+                    },
+                    {
+                        title: "Todo 2",
+                        isComplete: false
+                    },
+                    {
+                        title: "Todo 3",
+                        isComplete: false
+                    }
+                ]
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- todo list component -->
+    <div id="todo-list-example">
+        <input 
+            v-model="newTodoText" 
+            v-on:keyup.enter="addNewTodo" 
+            placeholder="Add a todo">
+        <ul>
+            <li 
+                is="todo-item" 
+                v-for="(todo, index) in todos" 
+                v-bind:key="todo.id" 
+                v-bind:title="todo.title"
+                v-on:remove="todos.splice(index, 1)">
+            </li>
+        </ul>
+    </div>
+    <script>
+        Vue.component('todo-item', {
+            template: '\
+    <li>\
+      {{ title }}\
+      <button v-on:click="$emit(\'remove\')">X</button>\
+    </li>\
+  ',
+            props: ['title']
+        })
+
+        new Vue({
+            el: '#todo-list-example',
+            data: {
+                newTodoText: '',
+                todos: [
+                    {
+                        id: 1,
+                        title: 'Do the dishes',
+                    },
+                    {
+                        id: 2,
+                        title: 'Take out the trash',
+                    },
+                    {
+                        id: 3,
+                        title: 'Mow the lawn'
+                    }
+                ],
+                nextTodoId: 4
+            },
+            methods: {
+                addNewTodo: function () {
+                    this.todos.push({
+                        id: this.nextTodoId++,
+                        title: this.newTodoText
+                    })
+                    this.newTodoText = ''
+                }
+            }
+        })
+
+    </script>
+</body>
+
+</html>

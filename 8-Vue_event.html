@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <!-- v-on DOM 이벤트를 듣고 트리거될 때 js 실행 -->
+    <div id="app1">
+        <h1>v-on:click event</h1>
+        <button v-on:click="counter += 1">Add 1</button>
+        <p>버튼을 클릭한 횟수는 {{ counter }}번 입니다</p>
+    </div>
+    <script>
+        var app1 = new Vue({
+            el: "#app1",
+            data: {
+                counter: 0
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- methods에 정의한 뒤 v-on 으로 불러오기 -->
+    <div id="app2">
+        <h1>v-on:click event methods</h1>
+        <button @click="greet">Greet</button>
+    </div>
+    <script>
+        var app2 = new Vue({
+            el: "#app2",
+            data: {
+                name: "Vue.js"
+            },
+            methods: {
+                greet: function (event) {
+                    alert('Hello ' + this.name + '!')
+                    //'event'는 네이티브 DOM 이벤트입니다
+                    if (event) {
+                        alert(event.target.tagName)
+                    }
+                }
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- 인라인에서 이벤트 바인딩 -->
+    <div id="app3">
+        <h1>v-on:click inline handling</h1>
+        <button @click="say('hi')">Say hi</button>
+        <button @click="say('what')">Say what</button>
+        <p>----------------------------------</p>
+        <!-- 원본 DOM 이벤트에 엑세스하기 위해 $event 사용 -->
+        <button @click="warn('warning', $event)">Warning</button>
+    </div>
+    <script>
+        var app3 = new Vue({
+            el: "#app3",
+            methods: {
+                say: function (message) {
+                    alert(message)
+                },
+                warn: function (message, event) {
+                    if (event) {
+                        event.preventDefault() //preventDefault를 호출하게 되면 이벤트가 발생하지 않음
+                        alert(message)
+                    }
+                }
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- v-on 이벤트 수식어 
+    .stop
+    .prevent
+    .capture
+    .self
+    .once
+    -->
+    <div id="app4">
+        <!-- 클릭시 전파가 중단됨 -->
+        <h1>v-on event 수식어</h1>
+        <h5>v-on:click.stop</h5>
+        <a v-on:click.stop="doThis">@click.stop</a>
+
+        <!-- submit을 해도 페이지가 다시 로드 되지 않음 -->
+        <h5>v-on:submit.prevent</h5>
+        <form v-on:submit.prevent="onSubmit">
+            <input type="text" name="onSubmit">
+            <input type="submit">
+        </form>
+
+        <h5>v-on:submit</h5>
+        <form v-on:submit="onSubmit">
+            <input type="text" name="onSubmit">
+            <input type="submit">
+        </form>
+
+        <h5>v-on:submit.prevent without method</h5>
+        <form v-on:submit.prevent>
+            <input type="text" name="onSubmit">
+            <input type="submit">
+        </form>
+
+        <!-- 이벤트 리스너를 추가할 때 캡처모드를 사용합니다 -->
+        <!-- 즉, 내부 엘리먼트를 대상으로 하는 이벤트가 해당 엘리먼트에서 처리되기 전에 여기서 처리합니다. -->
+        <h5>v-on:click.capture</h5>
+        <div v-on:click.capture="doThis">@click.capture</div>
+
+        <!-- event.target이 엘리먼트 자체인 경우에만 트리거를 처리합니다 -->
+        <!-- 자식 엘리먼트에서는 안됩니다 -->
+        <h5>v-on:click.self</h5>
+        <div v-on:click.self="doThat">@click.self</div>
+
+        <!-- 클릭 이벤트는 최대 한번만 트리거 됩니다. -->
+        <h5>v-on:click.once</h5>
+        <a v-on:click.once="doThis">@click.once</a>
+
+        <!-- 스크롤의 기본 이벤트를 취소할 수 없습니다. -->
+        <!-- .prevent와 함계 사용하지 말것 -->
+        <h5>v-on:scroll.passive</h5>
+        <div v-on:scroll.passive="onScroll">@scroll.passive</div>
+
+    </div>
+    <script>
+        var app4 = new Vue({
+            el: "#app4",
+            methods: {
+                doThis: function () {
+                    alert("Do This")
+                },
+                onSubmit: function () {
+                    alert("Submit")
+                },
+                doThat: function () {
+                    alert("Do That")
+                }
+            }
+        })
+    </script>
+    <hr />
+
+    <!-- key 수식어
+    .enter
+    .tab
+    .delete (“Delete” 와 “Backspace” 키 모두를 캡처합니다)
+    .esc
+    .space
+    .up
+    .down
+    .left
+    .right
+    -->
+    <div id="app5">
+        <h1>v-on key 수식어</h1>
+
+        <!-- enter를 입력했을 때 `submit()`을 호출합니다  -->
+        <h5>v-on:keyup</h5>
+        <form>
+            <label>up</label>
+            <input v-on:keyup.up="up" name="upFunc" />
+        </form>
+
+        <h5>v-on:click custom</h5>
+        <form>
+            <label>f2</label>
+            <input v-on:keyup.f2="f2" name="f2Func">
+        </form>
+
+        <!-- KeyboardEvent.key 를 통해 노출된 유효키 이름을 수식어로 직접 사용가능 -->
+        <h5>v-on:click automatic</h5>
+        <form>
+            <label>page down</label>
+            <input v-on:keyup.page-down="page_down" name="pagedownFunc">
+        </form>
+    </div>
+    <script>
+        // `v-on:keyup.page-down`을 사용할 수 있습니다.
+        Vue.config.keyCodes = {
+            f2: 113
+        }
+        var app5 = new Vue({
+            el: "#app5",
+            methods: {
+                up: function () {
+                    alert('up')
+                },
+                f2: function () {
+                    alert('f2')
+                },
+                page_down: function () {
+                    alert('page-down')
+                }
+            }
+        })
+    </script>
+    <hr/>
+
+    <!-- system 수식어 키 목록
+    .ctrl
+    .alt.
+    .shift
+    .meta
+    위 수식어키 눌러진 경우에만 이벤트 리스너를 트리거할 수 있음
+    맥에서 meta는 command키
+    윈도우에서 meta는 window키
+    -->
+    <div id="app6">
+        <h1>v-on system 수식어</h1>
+
+        <h5>alt + c</h5>
+        <form>
+            <input @keyup.alt.67="clear"/>
+        </form>
+
+        <h5>ctrl + click</h5>
+        <form>
+            <div @click.ctrl="doSomething">Do something</div>
+        </form>
+    </div>
+    <script>
+    var app6 = new Vue({
+        el: "#app6",
+        methods: {
+            clear: function () {
+                alert('clear')
+            },
+            doSomething: function () {
+                alert('Do Something')
+            }
+        }
+    })
+    </script>
+    <hr/>
+
+    <!-- exact 수식어. 정확한 키 조합을 정해줌 -->
+    <div id="app7">
+        <h1>v-on exact 수식어</h1>
+
+        <!-- ctrl key 이외에도 다른 system key와 같이 눌려도 작동 -->
+        <h5>only ctrl</h5>
+        <button @click.ctrl="doSomething">A</button>
+
+        <!-- ctrl system key만 눌린 상태에서 작동 -->
+        <h5>ctrl.exact</h5>
+        <button @click.ctrl.exact="doSomething">A</button>
+
+        <!-- system key 없이 그냥 누를때 작동 -->
+        <h5>no system key</h5>
+        <button @click.exact="doSomething">A</button>
+    </div>
+    <script>
+    var app7 = new Vue({
+        el: "#app7",
+        methods: {
+            doSomething: function () {
+                alert("Do Something")
+            }
+        }
+    })
+    </script>
+
+    <!-- 마우스 버튼 수식어
+    .left
+    .right
+    .middle
+    -->
+</body>
+
+</html>
